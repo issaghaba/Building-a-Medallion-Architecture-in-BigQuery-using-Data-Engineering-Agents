@@ -1,0 +1,45 @@
+config {
+  type: "table",
+  database: "ibadatatrust",
+  schema: "bronze",
+  name: "customer_rejected_records",
+  description: "This table contains customer records that are duplicates or fail data quality checks."
+}
+
+/**
+This table selects customers with duplicate IDs or that fail data quality checks
+from the bronze customer table.
+*/
+
+-- Records with duplicate customer_id
+select *
+from ${ref("customer")}
+where customer_id in (
+    select customer_id
+    from ${ref("customer")}
+    group by customer_id
+    having count(1) > 1
+)
+
+UNION ALL
+
+-- Records with unique customer_id that fail the completeness check
+select *
+from ${ref("customer")}
+where customer_id in (
+    select customer_id
+    from ${ref("customer")}
+    group by customer_id
+    having count(1) = 1
+)
+and (
+    first_name is null or first_name = '' or
+    last_name is null or last_name = ''
+)
+
+UNION ALL
+
+-- Records with invalid email format
+select *
+from ${ref("customer")}
+where NOT REGEXP_CONTAINS(email, r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')

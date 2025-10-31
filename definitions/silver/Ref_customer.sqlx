@@ -1,0 +1,39 @@
+config {
+  type: "table",
+  database: "ibadatatrust",
+  schema: "silver",
+  name: "Ref_customer",
+  description: "This table contains unique customer records from the bronze customer table, with data quality transformations applied."
+}
+
+/**
+This table selects customers with unique IDs from the bronze customer table,
+and applies data quality transformations.
+*/
+with customer_id_counts as (
+  select
+    customer_id,
+    count(*) as id_count
+  from ${ref("customer")}
+  group by customer_id
+)
+
+select
+  c.customer_id,
+  IFNULL(NULLIF(c.first_name, ''), 'N/A') as first_name,
+  IFNULL(NULLIF(c.last_name, ''), 'N/A') as last_name,
+  c.email,
+  c.phone_number,
+  c.address,
+  c.city,
+  c.state,
+  c.zip_code,
+  c.country,
+  c.date_of_birth,
+  c.age,
+  c.account_status,
+  c.last_activity_date,
+  c.registration_date
+from ${ref("customer")} c
+join customer_id_counts cic on c.customer_id = cic.customer_id
+where cic.id_count = 1
