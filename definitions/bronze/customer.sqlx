@@ -1,0 +1,28 @@
+config {
+  type: "operations",
+  hasOutput: true,
+  schema: "bronze"
+}
+
+CREATE OR REPLACE EXTERNAL TABLE ${self()}
+(
+  customer_id INTEGER,
+  first_name STRING,
+  last_name STRING,
+  email STRING,
+  phone_number STRING,
+  address STRING,
+  city STRING,
+  state STRING,
+  zip_code STRING,
+  country STRING,
+  date_of_birth STRING,
+  age INTEGER,
+  account_status STRING,
+  last_activity_date STRING,
+  registration_date STRING
+)
+OPTIONS (
+  uris = ["gs://governed-data-raw-ooidpa57b1/customer/*"],
+  format = "AVRO"
+)

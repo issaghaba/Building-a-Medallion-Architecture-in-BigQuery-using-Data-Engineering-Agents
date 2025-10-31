@@ -1,0 +1,15 @@
+config {
+  type: "operations",
+  hasOutput: true,
+  schema: "bronze"
+}
+
+CREATE OR REPLACE EXTERNAL TABLE ${self()}
+(
+  description STRING,
+  product STRING
+)
+OPTIONS (
+  uris = ["gs://governed-data-raw-ooidpa57b1/product/*"],
+  format = "JSON"
+)
