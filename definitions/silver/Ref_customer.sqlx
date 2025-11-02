@@ -17,12 +17,11 @@ with customer_id_counts as (
   from ${ref("customer")}
   group by customer_id
 )
-
+ 
 select
   c.customer_id,
-  IFNULL(NULLIF(c.first_name, ''), 'N/A') as first_name,
+  IFNULL(NULLIF(c.first_name, ''), 'N/A') as first_name,-- Demo
   IFNULL(NULLIF(c.last_name, ''), 'N/A') as last_name,
-  c.email,
   c.phone_number,
   c.address,
   c.city,
