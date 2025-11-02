@@ -1,6 +1,0 @@
-config {
-  type: "declaration",
-  database: "ibadatatrust",
-  schema: "bronze",
-  name: "customer",
-}
