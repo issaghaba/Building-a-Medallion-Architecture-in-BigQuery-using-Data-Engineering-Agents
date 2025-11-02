@@ -1,0 +1,23 @@
+config {
+  type: "operations",
+  hasOutput: true,
+  schema: "bronze"
+}
+
+CREATE OR REPLACE EXTERNAL TABLE ${self()}
+(
+  transaction_id STRING,
+  customer_id INTEGER,
+  order_date DATE,
+  order_time TIME,
+  transaction_type STRING,
+  region STRING,
+  quantity INTEGER,
+  product STRING,
+  product_category STRING,
+  price FLOAT64
+)
+OPTIONS (
+  uris = ["gs://governed-data-raw-ooidpa57b1/customer_transaction/*"],
+  format = "PARQUET"
+)
