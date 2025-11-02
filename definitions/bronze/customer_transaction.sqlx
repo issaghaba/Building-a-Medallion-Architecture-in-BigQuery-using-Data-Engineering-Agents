@@ -15,7 +15,7 @@ CREATE OR REPLACE EXTERNAL TABLE ${self()}
   quantity INTEGER,
   product STRING,
   product_category STRING,
-  price  FLOAT64
+  price   FLOAT64
 )
 OPTIONS (
   uris = ["gs://governed-data-raw-ooidpa57b1/customer_transaction/*"],
