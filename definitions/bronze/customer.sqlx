@@ -1,8 +1,9 @@
 config {
-  type: "operations",
-  hasOutput: true,
-  schema: "bronze"
+  type:"operations",
+  hasOutput:true,
+  schema:"bronze"
 }
+-- demo
 
 CREATE OR REPLACE EXTERNAL TABLE ${self()}
 (
