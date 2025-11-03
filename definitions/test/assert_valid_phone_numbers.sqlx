@@ -1,0 +1,15 @@
+
+config {
+  type: "assertion"
+}
+
+select
+  *
+from
+  ${ref("Ref_customer")}
+where
+
+  not regexp_contains(
+    trim(phone_number), 
+    r'^\+?[0-9\s-()]{7,15}$' 
+  )
