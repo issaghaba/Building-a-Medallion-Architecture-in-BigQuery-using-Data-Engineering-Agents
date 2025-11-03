@@ -30,7 +30,7 @@ jobs:
 
       - name: Run tests (assertions)
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.DataEngineeringAgentSecret }}
         run: |
           dataform run \
             --tags tests \
@@ -40,7 +40,7 @@ jobs:
       - name: Publish transformations (only on main)
         if: github.ref == 'refs/heads/main'
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.DataEngineeringAgentSecret }}
         run: |
           dataform run \
             --var bronze_dataset=bronze \
