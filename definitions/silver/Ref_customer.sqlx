@@ -1,15 +1,12 @@
 config {
-  type: "table",
-  database: "ibadatatrust",
-  schema: "silver",
-  name: "Ref_customer",
-  description: "This table contains unique customer records from the bronze customer table, with data quality transformations applied."
+  type:"table",
+  database:"ibadatatrust",
+  schema:"silver",
+  name:"Ref_customer",
+  description:"This table contains unique customer records from the bronze customer table, with data quality transformations applied."
 }
 
-/**
-This table selects customers with unique IDs from the bronze customer table,
-and applies data quality transformations.
-*/
+
 with customer_id_counts as (
   select
     customer_id,
