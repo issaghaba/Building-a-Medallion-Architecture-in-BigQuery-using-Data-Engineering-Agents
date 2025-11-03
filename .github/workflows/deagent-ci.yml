@@ -9,39 +9,57 @@ on:
 jobs:
   ci-deagent:
     runs-on: ubuntu-latest
-
+    
+    # REQUIRED for Workload Identity Federation (WIF)
+    permissions:
+      contents: 'read'
+      id-token: 'write' # This is required for Google Cloud authentication
+      
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        
+      # --- SETUP ---
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies (Uses package-lock.json)
+        run: npm ci # This uses 'package-lock.json' and avoids the global install
 
-      - name: Install Dataform CLI
-        run: npm install -g @dataform/cli
+      - name: Configure Google Cloud Credentials (WIF)
+        uses: 'google-github-actions/auth@v2'
+        with:
+          # Replace this with the target Service Account email configured for WIF
+          workload_identity_provider: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID
+          service_account: your-dataform-sa@your-project-id.iam.gserviceaccount.com
+          
+      # --- CONTINUOUS INTEGRATION (CI) CHECKS ---
+    
+      
+      # 1. Compilation Check (REQUIRED)
+      - name: Validate Dataform project (Compile)
+        # We use npx to run the CLI installed via npm ci
+        run: npx dataform compile 
 
-      - name: Validate Dataform project
-        run: dataform compile
-
-      - name: Run tests (assertions)
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.DataEngineeringAgentSecret }}
+      # 2. Run Tests/Assertions
+      - name: Run Tests (Assertions)
+        # This step runs all assertions, which requires BigQuery access for testing.
+        # It's better to use dataform run --tags tests than dataform test for assertions.
+        # We use the authenticated environment variables for the Dataform command.
         run: |
-          dataform run \
+          npx dataform run \
             --tags tests \
             --var bronze_dataset=bronze \
             --var silver_dataset=silver
+            
+      # --- CONTINUOUS DEPLOYMENT (CD) ---
 
-      - name: Publish transformations (only on main)
-        if: github.ref == 'refs/heads/main'
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.DataEngineeringAgentSecret }}
+      - name: Publish transformations (only on main push)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          dataform run \
-            --var bronze_dataset=bronze \
-            --var silver_dataset=silver
+          npx dataform run \
+            --vars bronze_dataset=bronze \
+            --vars silver_dataset=silver
