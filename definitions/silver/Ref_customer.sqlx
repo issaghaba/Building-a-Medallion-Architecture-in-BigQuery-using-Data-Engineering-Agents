@@ -15,7 +15,6 @@ with customer_id_counts as (
     customer_id,
     count(*) as id_count
   from ${ref("customer")}
- 
   group by customer_id
 )
  
