@@ -7,6 +7,8 @@ config {
 }
 
 
+
+
 with customer_id_counts as (
   select
     customer_id,
