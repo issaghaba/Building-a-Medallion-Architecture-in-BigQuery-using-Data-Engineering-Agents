@@ -28,9 +28,11 @@ jobs:
 
       - name: Install dependencies (Uses package-lock.json)
         run: |
-          npm install -g @dataform/cli
-          npm install
+          npm install -g @dataform/cli@3
+          npm ci || npm install
 
+
+          
       - name: Configure Google Cloud Credentials (WIF)
         uses: 'google-github-actions/auth@v2'
         with:
