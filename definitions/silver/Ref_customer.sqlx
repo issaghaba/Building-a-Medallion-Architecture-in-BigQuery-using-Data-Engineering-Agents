@@ -6,7 +6,6 @@ config {
   description:"This table contains unique customer records from the bronze customer table, with data quality transformations applied."
 }
  
-
 /**
 This table selects customers with unique IDs from the bronze customer table,
 and applies data quality transformations.
