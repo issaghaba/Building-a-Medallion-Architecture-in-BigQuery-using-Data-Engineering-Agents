@@ -15,11 +15,19 @@ jobs:
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
-        with:
+        with: 
           node-version: 18
 
+<<<<<<< HEAD
+     # - name: Install dependencies (Uses package-lock.json)
+      #  run: |
+       
+       #   npm install -g @dataform/cli@3
+       #   npm ci || npm install
+=======
       - name: Install dependencies
         run: npm install
+>>>>>>> refs/heads/main
 
       - name: Run Dataform assertions
         run: npx dataform run --tags assertions
