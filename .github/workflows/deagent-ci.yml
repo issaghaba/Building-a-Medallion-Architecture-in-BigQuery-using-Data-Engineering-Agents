@@ -27,8 +27,12 @@ jobs:
           node-version: 18
 
       - name: Install dependencies (Uses package-lock.json)
-        run: npm ci # This uses 'package-lock.json' and avoids the global install
+        run: |
+          npm install -g @dataform/cli@3
+          npm ci || npm install
 
+
+          
       - name: Configure Google Cloud Credentials (WIF)
         uses: 'google-github-actions/auth@v2'
         with:
