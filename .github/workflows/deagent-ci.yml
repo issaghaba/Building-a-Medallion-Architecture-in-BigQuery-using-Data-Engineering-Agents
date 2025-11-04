@@ -26,10 +26,6 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies (Uses package-lock.json)
-        run: |
-          npm install -g @dataform/cli@3
-          npm ci || npm install
 
 
           
